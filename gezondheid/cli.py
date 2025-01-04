@@ -2,7 +2,10 @@
 Command line interface
 """
 
+import gezondheid.config as config
 from gezondheid.model import engine, Base, Health
+
+import csv
 
 import click
 from sqlalchemy.orm import Session
@@ -31,6 +34,38 @@ def db_drop() -> None:
     """Drop all tables."""
     click.echo("Drop database")
     Base.metadata.drop_all(engine)
+
+
+@db.command("export")
+def db_export() -> None:
+    """Export table to CSV."""
+    click.echo("Export health table to CSV")
+    with open(config.CSV_FILE, "w") as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=",")
+        csvwriter.writerow(
+            [
+                "Date",
+                "Sleep_Score",
+                "Body_Battery_max",
+                "Body_Battery_min",
+                "Active_Time",
+                "Defecation",
+            ]
+        )
+
+        with Session(engine) as session:
+            result = session.query(Health).order_by(Health.health_date).all()
+            for rows in result:
+                csvwriter.writerow(
+                    [
+                        rows.health_date,
+                        rows.health_sleep_score,
+                        rows.health_body_battery_max,
+                        rows.health_body_battery_min,
+                        rows.health_active_time,
+                        rows.health_defecation,
+                    ]
+                )
 
 
 @cli.group()
