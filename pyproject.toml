@@ -5,6 +5,7 @@ description = "Keep track of my health stats."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "altair>=5.5.0",
     "black>=25.1.0",
     "click>=8.1.8",
     "connectorx>=0.4.2",
@@ -13,4 +14,5 @@ dependencies = [
     "pyarrow>=19.0.1",
     "python-dotenv>=1.0.1",
     "sqlalchemy>=2.0.36",
+    "vl-convert-python>=1.7.0",
 ]
